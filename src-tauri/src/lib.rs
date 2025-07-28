@@ -22,6 +22,10 @@ fn toggle_window(app_handle: tauri::AppHandle) {
 pub fn run() {
     tauri::Builder::default()
         .setup(|app| {
+
+            #[cfg(target_os = "macos")]
+            app.set_activation_policy(tauri::ActivationPolicy::Accessory);
+
             // 메인 윈도우를 Gemini 사이트로 설정 (처음엔 숨김)
             let window = WebviewWindowBuilder::new(
                 app,
@@ -33,6 +37,8 @@ pub fn run() {
             .min_inner_size(800.0, 600.0)
             .center()
             .visible(false) // 처음엔 숨김
+            .skip_taskbar(true)
+            .always_on_top(true)
             .build()?;
 
             let window_clone = window.clone();
