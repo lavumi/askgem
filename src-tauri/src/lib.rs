@@ -94,6 +94,23 @@ pub fn run() {
                 })
                 .build(app)?;
 
+            // Auto Focus
+            let _ = window.eval("
+                if (document.readyState === 'complete') {
+                    setTimeout(() => {
+                        const textArea = document.querySelector('.ql-editor[contenteditable=\"true\"]');
+                        if (textArea) textArea.focus();
+                    }, 1000);
+                } else {
+                    window.addEventListener('load', () => {
+                        setTimeout(() => {
+                            const textArea = document.querySelector('.ql-editor[contenteditable=\"true\"]');
+                            if (textArea) textArea.focus();
+                        }, 1000);
+                    });
+                }
+            ");
+
             // 글로벌 단축키 설정 (Option+Space)
             app.handle().plugin(
                 tauri_plugin_global_shortcut::Builder::new()
